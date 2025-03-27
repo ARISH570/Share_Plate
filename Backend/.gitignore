@@ -1,0 +1,17 @@
+node_modules/
+.env
+*.log
+
+package-lock.json
+yarn.lock
+
+.vscode/
+
+# Ignore build and cache files
+dist/
+build/
+.cache/
+
+# Ignore system files
+.DS_Store
+Thumbs.db

@@ -1,0 +1,969 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Share Plate</title>
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+
+    <!-- Favicons -->
+    <link href="assets/img/favicon.png" rel="icon" />
+    <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon" />
+
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Inter:wght@100;200;300;400;500;600;700;800;900&family=Amatic+SC:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Vendor CSS Files -->
+    <link
+      href="assets/vendor/bootstrap/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="assets/vendor/bootstrap-icons/bootstrap-icons.css"
+      rel="stylesheet"
+    />
+    <link href="assets/vendor/aos/aos.css" rel="stylesheet" />
+    <link
+      href="assets/vendor/glightbox/css/glightbox.min.css"
+      rel="stylesheet"
+    />
+    <link href="assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet" />
+
+    <!-- Main CSS File -->
+    <link href="assets/css/main.css" rel="stylesheet" />
+    <style>
+      body {
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+        margin: 0;
+        padding: 0;
+        overflow-x: hidden;
+
+        background-image: url("./assets/images/meetings-bg.jpg");
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+        background-repeat: no-repeat;
+        position: relative;
+      }
+
+      body::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+
+        z-index: -1;
+      }
+
+      .menu {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        padding: 15px 0;
+        background-color: rgba(231, 229, 229, 0.9);
+        border-radius: 28px;
+        margin: 15px auto;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        max-width: 700px;
+        width: 90%;
+      }
+
+      .section-title {
+        text-align: center;
+        padding: 10px 0;
+        margin: 0;
+      }
+
+      .section-title {
+        text-align: center;
+        padding: 10px 0;
+        margin: 0;
+      }
+
+      .section-title h1 {
+        font-size: 2rem;
+        margin: 0;
+      }
+
+      .section-title h2 {
+        font-size: 1.5rem;
+        margin: 5px 0 15px;
+      }
+
+      .container {
+        max-width: 400x;
+        padding: 0 15px;
+        margin: 0 auto;
+      }
+
+      .menu-item-container {
+        flex: 0 0 calc(50% - 15px);
+        max-width: calc(50% - 15px);
+        padding: 15px;
+        background-color: rgba(253, 253, 253, 0.7); /* Light highlight */
+        border-radius: 12px; /* More rounded corners */
+        border: 1px solid rgba(0, 0, 0, 0.1); /* Subtle border */
+        transition: all 0.3s ease;
+        margin-bottom: 20px;
+      }
+      .menu-item-container:hover {
+        transform: scale(1.02);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        background-color: rgba(255, 255, 255, 0.9);
+      }
+      .menu-item {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        margin-bottom: 20px;
+        padding: 15px;
+        border-radius: 8px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      }
+
+      .menu-img {
+        width: 100%;
+        height: 160px; /* Increased from 140px */
+        object-fit: cover;
+        border-radius: 8px; /* Slightly more rounded */
+        margin-bottom: 12px;
+        box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+      }
+
+      .old-price {
+        text-decoration: line-through;
+        color: gray;
+        margin-right: 8px;
+        font-size: 0.9rem;
+      }
+
+      .new-price {
+        font-weight: bold;
+        color: #a12c2f;
+        font-size: 1rem;
+      }
+
+      .quantity-control {
+        background-color: #a12c2f;
+        color: white;
+        padding: 6px 10px;
+        border-radius: 6px;
+        margin: 8px 0;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.9rem;
+      }
+
+      .quantity-control button {
+        background: none;
+        border: none;
+        color: white;
+        font-size: 1rem;
+        cursor: pointer;
+        padding: 0 8px;
+      }
+
+      .quantity {
+        padding: 0 10px;
+        font-size: 1rem;
+      }
+
+      #notification {
+        position: fixed;
+        top: 50px;
+        right: 10px;
+        background: #28a745;
+        color: white;
+        padding: 10px 15px;
+        border-radius: 4px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        z-index: 1000;
+        display: none;
+        font-size: 0.9rem;
+      }
+
+      .restaurant-select-container {
+        position: relative;
+        max-width: 400px;
+        margin: 0 auto 15px;
+      }
+
+      .restaurant-select {
+        border: 2px solid red !important;
+        font-size: 1rem;
+        padding: 8px 15px;
+        width: 100%;
+        appearance: none;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        text-align: center;
+        text-align-last: center;
+      }
+
+      .restaurant-select-container::after {
+        content: "▼";
+        font-size: 0.8rem;
+        position: absolute;
+        right: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+        pointer-events: none;
+        color: red;
+      }
+
+      #cartButton {
+        position: fixed;
+        top: 10px;
+        right: 20px;
+        background-color: #f0ad4e;
+        color: white;
+        padding: 8px 15px 8px 12px;
+        border-radius: 25px 4px 4px 25px;
+        cursor: pointer;
+        z-index: 1000;
+        font-size: 0.9rem;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        border: none;
+        transition: all 0.3s ease;
+      }
+
+      #cartButton:hover {
+        background-color: #ec971f;
+        transform: scale(1.05);
+      }
+      .btn-success {
+        background-color: #f0ad4e !important;
+        border-color: #a12c2f !important;
+        border-width: 2px !important;
+        border-style: solid !important;
+        color: white !important;
+        transition: all 0.3s ease;
+        padding: 10px 20px !important;
+        font-size: 1rem !important;
+        font-weight: bold !important;
+        border-radius: 6px !important;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1) !important;
+      }
+
+      .btn-success:hover {
+        background-color: #ec971f !important;
+        border-color: #a12c2f !important;
+        transform: scale(1.05);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15) !important;
+      }
+      #foodItemsContainer {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 15px;
+        padding: 0;
+      }
+
+      .menu-item-container {
+        flex: 0 0 calc(50% - 15px);
+        max-width: calc(50% - 15px);
+      }
+
+      /* Responsive adjustments */
+      @media (max-width: 768px) {
+        .container {
+          max-width: 600px;
+        }
+
+        .menu-item-container {
+          flex: 0 0 100%;
+          max-width: 100%;
+        }
+
+        .menu-item {
+          flex-direction: row;
+          align-items: center;
+        }
+
+        .menu-img {
+          width: 120px;
+          height: 120px;
+          margin-right: 12px;
+          margin-bottom: 0;
+        }
+      }
+
+      @media (max-width: 576px) {
+        .container {
+          max-width: 100%;
+          padding: 0 10px;
+        }
+
+        .menu-item {
+          flex-direction: column;
+        }
+
+        .menu-img {
+          width: 100%;
+          height: 120px;
+          margin-right: 0;
+          margin-bottom: 10px;
+        }
+
+        .section-title h1 {
+          font-size: 1.8rem;
+        }
+
+        .section-title h2 {
+          font-size: 1.3rem;
+        }
+
+        .restaurant-select-container {
+          max-width: 300px;
+        }
+      }
+    </style>
+  </head>
+
+  <body class="index-page">
+    <div id="notification"></div>
+
+    <section id="menu" class="menu section">
+      <div class="container section-title" data-aos="fade-up">
+        <h1>MENU</h1>
+      </div>
+
+      <div class="container">
+        <div class="restaurant-select-container">
+          <select
+            class="form-control restaurant-select"
+            id="restaurantDropdown"
+          >
+            <option value="">Select Restaurant</option>
+            <!-- Options will be populated by JavaScript -->
+          </select>
+        </div>
+
+        <div id="foodItemsContainer" class="row justify-content-center"></div>
+      </div>
+    </section>
+
+    <div id="cartButton">View Cart</div>
+
+    <script>
+      // Food data for all restaurants
+      const foodData = {
+        burgerking: [
+          {
+            name: "Whopper",
+            image: "assets/images/menu/whopper.jpg",
+            ingredients: "Aaloo patty, Lettuce, Tomato, Onions",
+            price: 0,
+            oldPrice: 70,
+            maxLimit: 3,
+          },
+          {
+            name: "Fries",
+            image: "assets/images/menu/fries.jpg",
+            ingredients: "Potatoes, Salt",
+            price: 0,
+            oldPrice: 100,
+            maxLimit: 2,
+          },
+        ],
+        dominos: [
+          {
+            name: "Paneer Pizza",
+            image: "assets/images/menu/paneer_pizza.jpg",
+            ingredients: "Dough, Tomato Sauce, Paneer, Capsicum, Cheese",
+            price: 0,
+            oldPrice: 99,
+            maxLimit: 1,
+          },
+          {
+            name: "Garlic Bread",
+            image: "assets/images/menu/Garlic Bread.jpg",
+            ingredients: "Bread, Garlic, Butter",
+            price: 0,
+            oldPrice: 89,
+            maxLimit: 4,
+          },
+        ],
+        biryanibyblues: [
+          {
+            name: "Chicken Biryani",
+            image: "assets/images/menu/chicken biryani.jpg",
+            ingredients: "Rice, Chicken, Spices",
+            price: 0,
+            oldPrice: 149,
+            maxLimit: 2,
+          },
+          {
+            name: "Raita",
+            image: "assets/images/menu/raita.jpg",
+            ingredients: "Yogurt, Cucumber, Spices",
+            price: 0,
+            oldPrice: 60,
+            maxLimit: 5,
+          },
+        ],
+        wowmomo: [
+          {
+            name: "Chicken Tandoori Momos",
+            image: "assets/images/menu/paint momos.png",
+            ingredients: "Chicken, Flour, Spices",
+            price: 0,
+            oldPrice: 120,
+            maxLimit: 2,
+          },
+          {
+            name: "Veg Steamed Momos",
+            image: "assets/images/menu/steam momo.png",
+            ingredients: "Vegetables, Flour, Spices",
+            price: 0,
+            oldPrice: 90,
+            maxLimit: 3,
+          },
+        ],
+        pizzahut: [
+          {
+            name: "Margherita Pizza",
+            image: "assets/images/menu/margarita pizza.jpg",
+            ingredients: "Dough, Tomato Sauce, Mozzarella Cheese",
+            price: 0,
+            oldPrice: 135,
+            maxLimit: 1,
+          },
+          {
+            name: "Cheese Garlic Bread",
+            image: "assets/images/menu/Cheesy Texas Toast.jpg",
+            ingredients: "Bread, Cheese, Garlic",
+            price: 0,
+            oldPrice: 99,
+            maxLimit: 1,
+          },
+        ],
+        kfc: [
+          {
+            name: "Chicken Bucket",
+            image: "assets/images/menu/kfc chicken bucket.jpg",
+            ingredients: "Crispy Fried Chicken",
+            price: 0,
+            oldPrice: 299,
+            maxLimit: 2,
+          },
+          {
+            name: "Zinger Burger",
+            image: "assets/images/menu/zinger burger.jpg",
+            ingredients: "Chicken Patty, Lettuce, Mayo",
+            price: 0,
+            oldPrice: 65,
+            maxLimit: 1,
+          },
+        ],
+        mcdonalds: [
+          {
+            name: "McChicken",
+            image: "assets/images/menu/mc chicken.jpg",
+            ingredients: "Chicken Patty, Lettuce, Mayo, Bun",
+            price: 0,
+            oldPrice: 80,
+            maxLimit: 1,
+          },
+          {
+            name: "French Fries",
+            image: "assets/images/menu/french_fries.jpg",
+            ingredients: "Potatoes, Salt",
+            price: 0,
+            oldPrice: 79,
+            maxLimit: 3,
+          },
+        ],
+        subway: [
+          {
+            name: "Veggie Delight Sub",
+            image: "assets/images/menu/veggie sub.jpg",
+            ingredients: "Lettuce, Tomato, Cucumber, Cheese, Bread",
+            price: 0,
+            oldPrice: 139,
+            maxLimit: 2,
+          },
+          {
+            name: "Chicken Teriyaki Sub",
+            image: "assets/images/menu/chicken teriyaka.jpg",
+            ingredients: "Chicken, Teriyaki Sauce, Lettuce, Bread",
+            price: 0,
+            oldPrice: 230,
+            maxLimit: 2,
+          },
+        ],
+        haldirams: [
+          {
+            name: "Raj Kachori",
+            image: "assets/images/menu/raj kachori.jpg",
+            ingredients: "Flour, Potatoes, Spices, Yogurt",
+            price: 0,
+            oldPrice: 120,
+            maxLimit: 4,
+          },
+          {
+            name: "Chole Bhature",
+            image: "assets/images/menu/chole_bhature.jpg",
+            ingredients: "Chickpeas, Spices, Fried Bread",
+            price: 0,
+            oldPrice: 110,
+            maxLimit: 2,
+          },
+        ],
+        bbqnation: [
+          {
+            name: "Grilled Chicken",
+            image: "assets/images/menu/Grilled Chicken.jpg",
+            ingredients: "Chicken, BBQ Sauce, Spices",
+            price: 0,
+            oldPrice: 350,
+            maxLimit: 0,
+          },
+          {
+            name: "Paneer Tikka",
+            image: "assets/images/menu/Paneer Tikka.jpg",
+            ingredients: "Paneer, Yogurt, Spices",
+            price: 0,
+            oldPrice: 249,
+            maxLimit: 1,
+          },
+        ],
+        theobroma: [
+          {
+            name: "Chocolate Brownie",
+            image: "assets/images/menu/choc brownie.jpg",
+            ingredients: "Chocolate, Butter, Flour, Sugar",
+            price: 0,
+            oldPrice: 99,
+            maxLimit: 5,
+          },
+          {
+            name: "Cheesecake",
+            image: "assets/images/menu/cheesecake.jpg",
+            ingredients: "Cream Cheese, Sugar, Biscuit Crust",
+            price: 0,
+            oldPrice: 59,
+            maxLimit: 1,
+          },
+        ],
+        starbucks: [
+          {
+            name: "Cappuccino",
+            image: "assets/images/menu/cappuccino.jpg",
+            ingredients: "Espresso, Milk, Foam",
+            price: 0,
+            oldPrice: 190,
+            maxLimit: 0,
+          },
+          {
+            name: "Blueberry Muffin",
+            image: "assets/images/menu/blueberry muffin.jpg",
+            ingredients: "Flour, Sugar, Blueberries",
+            price: 0,
+            oldPrice: 80,
+            maxLimit: 2,
+          },
+        ],
+        chaayos: [
+          {
+            name: "Masala Chai",
+            image: "assets/images/menu/masala chai.jpg",
+            ingredients: "Tea, Spices, Milk",
+            price: 0,
+            oldPrice: 40,
+            maxLimit: 0,
+          },
+          {
+            name: "Paneer Kulcha",
+            image: "assets/images/menu/paneer_kulcha.jpg",
+            ingredients: "Bread, Paneer, Spices",
+            price: 0,
+            oldPrice: 75,
+            maxLimit: 4,
+          },
+        ],
+        dunkindonuts: [
+          {
+            name: "Glazed Donut",
+            image: "assets/images/menu/glazed_donut.jpg",
+            ingredients: "Flour, Sugar, Glaze",
+            price: 0,
+            oldPrice: 60,
+            maxLimit: 5,
+          },
+          {
+            name: "Cold Coffee",
+            image: "assets/images/menu/cold coffee.jpg",
+            ingredients: "Milk, Coffee, Ice",
+            price: 0,
+            oldPrice: 70,
+            maxLimit: 1,
+          },
+        ],
+        tacobell: [
+          {
+            name: "Crunchy Taco",
+            image: "assets/images/menu/crunchy taco.jpg",
+            ingredients: "Taco Shell, Beef, Cheese, Lettuce",
+            price: 0,
+            oldPrice: 119,
+            maxLimit: 3,
+          },
+          {
+            name: "Burrito",
+            image: "assets/images/menu/burrito.jpg",
+            ingredients: "Tortilla, Beans, Rice, Cheese",
+            price: 0,
+            oldPrice: 149,
+            maxLimit: 4,
+          },
+        ],
+        costacoffee: [
+          {
+            name: "Café Latte",
+            image: "assets/images/menu/cafe_latte.jpg",
+            ingredients: "Espresso, Milk",
+            price: 0,
+            oldPrice: 215,
+            maxLimit: 1,
+          },
+          {
+            name: "Chocolate Croissant",
+            image: "assets/images/menu/chocolate_croissant.jpg",
+            ingredients: "Flour, Chocolate, Butter",
+            price: 0,
+            oldPrice: 111,
+            maxLimit: 2,
+          },
+        ],
+        nandos: [
+          {
+            name: "Peri Peri Chicken",
+            image: "assets/images/menu/Peri Peri Chicken.jpg",
+            ingredients: "Chicken, Peri Peri Sauce, Spices",
+            price: 0,
+            oldPrice: 250,
+            maxLimit: 1,
+          },
+          {
+            name: "Garlic Bread",
+            image: "assets/images/menu/Garlic bread.jpg",
+            ingredients: "Bread, Garlic, Butter",
+            price: 0,
+            oldPrice: 100,
+            maxLimit: 3,
+          },
+        ],
+        carlsjr: [
+          {
+            name: "Famous Star Burger",
+            image: "assets/images/menu/famous_star_burger.jpg",
+            ingredients: "Beef Patty, Lettuce, Tomato, Cheese",
+            price: 0,
+            oldPrice: 120,
+            maxLimit: 1,
+          },
+          {
+            name: "Chicken Strips",
+            image: "assets/images/menu/chicken_strips.jpg",
+            ingredients: "Chicken, Flour, Spices",
+            price: 0,
+            oldPrice: 99,
+            maxLimit: 3,
+          },
+        ],
+        sagarratna: [
+          {
+            name: "Masala Dosa",
+            image: "assets/images/menu/masala_dosa.jpg",
+            ingredients: "Rice Batter, Potatoes, Spices",
+            price: 0,
+            oldPrice: 70,
+            maxLimit: 1,
+          },
+          {
+            name: "Idli Sambar",
+            image: "assets/images/menu/idli sam.jpg",
+            ingredients: "Idli, Rice Flour, Dal, Spices",
+            price: 0,
+            oldPrice: 99,
+            maxLimit: 2,
+          },
+        ],
+        gianis: [
+          {
+            name: "Chocolate Shake",
+            image: "assets/images/menu/choco shake.jpg",
+            ingredients: "Chocolate, Palm Oil, Sugar",
+            price: 0,
+            oldPrice: 30,
+            maxLimit: 2,
+          },
+          {
+            name: "Mango Shake",
+            image: "assets/images/menu/mango shake.jpg",
+            ingredients: "Chocolate, Palm Oil, Sugar, Almond, Kaju",
+            price: 0,
+            oldPrice: 60,
+            maxLimit: 2,
+          },
+        ],
+      };
+
+      // DOM elements
+      const restaurantDropdown = document.getElementById("restaurantDropdown");
+      const foodItemsContainer = document.getElementById("foodItemsContainer");
+      const notification = document.getElementById("notification");
+
+      // Show notification message
+      function showNotification(message, isError = false) {
+        notification.textContent = message;
+        notification.style.backgroundColor = isError ? "#dc3545" : "#28a745";
+        notification.style.display = "block";
+        setTimeout(() => {
+          notification.style.display = "none";
+        }, 3000);
+      }
+
+      // Display food items for selected restaurant
+      function displayFoodItems() {
+        const selectedRestaurant = restaurantDropdown.value;
+        foodItemsContainer.innerHTML = "";
+
+        if (selectedRestaurant && foodData[selectedRestaurant]) {
+          const items = foodData[selectedRestaurant];
+          items.forEach((item) => {
+            const foodItemDiv = document.createElement("div");
+            foodItemDiv.classList.add("menu-item-container");
+
+            foodItemDiv.innerHTML = `
+            <div class="menu-item">
+              <img src="${item.image}" class="menu-img" alt="${item.name}">
+              <div class="menu-content">
+                <h4>${item.name}</h4>
+                <p class="text-muted">${item.ingredients}</p>
+                <div class="menu-actions">
+                  <div class="quantity-control">
+                    <button onclick="updateQuantity(this, -1)">-</button>
+                    <span class="quantity">1</span>
+                    <button onclick="updateQuantity(this, 1)">+</button>
+                  </div>
+                  <div class="price-box my-2">
+                    <span class="old-price">Rs ${item.oldPrice.toFixed(
+                      2
+                    )}</span>
+                    <span class="new-price">Rs ${item.price.toFixed(2)}</span>
+                  </div>
+                  <button class="btn btn-success" onclick="addToCart(this, '${
+                    item.name
+                  }', ${item.price}, '${item.image}')">
+    Add to Cart
+</button>
+                </div>
+              </div>
+            </div>
+          `;
+
+            foodItemsContainer.appendChild(foodItemDiv);
+          });
+        } else if (selectedRestaurant) {
+          foodItemsContainer.innerHTML = `
+          <div class="col-12 text-center py-4">
+            <p>No leftover food available for this restaurant.</p>
+          </div>
+        `;
+        }
+      }
+
+      // Update quantity
+      function updateQuantity(button, change) {
+        const quantitySpan = button.parentElement.querySelector(".quantity");
+        let currentQuantity = parseInt(quantitySpan.textContent);
+
+        // Get the max limit from the food item data
+        const menuItem = button.closest(".menu-item");
+        const itemName = menuItem.querySelector("h4").textContent;
+        const selectedRestaurant = restaurantDropdown.value;
+        const foodItems = foodData[selectedRestaurant];
+        const item = foodItems.find((food) => food.name === itemName);
+        const maxLimit = item.maxLimit || 5; // Default to 5 if maxLimit isn't specified
+
+        currentQuantity += change;
+
+        if (currentQuantity > maxLimit) {
+          showNotification(`You can only add up to ${maxLimit} of this item.`);
+          currentQuantity = maxLimit;
+        }
+
+        if (currentQuantity < 1) {
+          currentQuantity = 1;
+        }
+
+        quantitySpan.textContent = currentQuantity;
+      }
+
+      // Add item to cart
+      // Add item to cart
+      function addToCart(button, name, price, image) {
+        let cart = JSON.parse(localStorage.getItem("cart")) || [];
+        const totalLimit = 10; // Global cart limit
+
+        // Get current quantity from the UI
+        const menuItem = button.closest(".menu-item");
+        const quantityToAdd = parseInt(
+          menuItem.querySelector(".quantity").textContent
+        );
+
+        // Get the max limit for this specific item
+        const selectedRestaurant = restaurantDropdown.value;
+        const foodItems = foodData[selectedRestaurant];
+        const item = foodItems.find((food) => food.name === name);
+        const maxLimit = item.maxLimit || 5; // Default to 5 if maxLimit isn't specified
+
+        // Check if item already in cart
+        const existingItemIndex = cart.findIndex((item) => item.name === name);
+        const existingItem =
+          existingItemIndex !== -1 ? cart[existingItemIndex] : null;
+
+        // Calculate potential new quantities
+        const potentialItemQuantity = existingItem
+          ? existingItem.quantity + quantityToAdd
+          : quantityToAdd;
+        const potentialCartTotal =
+          cart.reduce((sum, item) => sum + item.quantity, 0) + quantityToAdd;
+
+        // Check all possible limits
+        if (potentialCartTotal > totalLimit) {
+          showNotification(
+            `Cart is full! Maximum ${totalLimit} items allowed.`,
+            true
+          );
+          return;
+        }
+
+        if (potentialItemQuantity > maxLimit) {
+          showNotification(`Maximum ${maxLimit} ${name} allowed.`, true);
+          return;
+        }
+
+        // If we passed all checks, add to cart
+        if (existingItem) {
+          existingItem.quantity += quantityToAdd;
+          showNotification(
+            `${quantityToAdd} ${name} added to cart! (Total: ${existingItem.quantity})`,
+            false
+          );
+        } else {
+          cart.push({
+            name: name,
+            price: price,
+            image: image,
+            quantity: quantityToAdd,
+            maxLimit: maxLimit,
+          });
+          showNotification(`${quantityToAdd} ${name} added to cart!`, false);
+        }
+
+        localStorage.setItem("cart", JSON.stringify(cart));
+      }
+
+      // Initialize restaurant dropdown with random restaurants
+      document.addEventListener("DOMContentLoaded", function () {
+        const allRestaurants = [
+          { name: "Burger King", value: "burgerking" },
+          { name: "Dominos", value: "dominos" },
+          { name: "Biryani Blues", value: "biryanibyblues" },
+          { name: "Wow Momo", value: "wowmomo" },
+          { name: "Pizza Hut", value: "pizzahut" },
+          { name: "KFC", value: "kfc" },
+          { name: "McDonald's", value: "mcdonalds" },
+          { name: "Subway", value: "subway" },
+          { name: "Haldiram's", value: "haldirams" },
+          { name: "Barbeque Nation", value: "bbqnation" },
+          { name: "Theobroma", value: "theobroma" },
+          { name: "Starbucks", value: "starbucks" },
+          { name: "Chaayos", value: "chaayos" },
+          { name: "Dunkin' Donuts", value: "dunkindonuts" },
+          { name: "Taco Bell", value: "tacobell" },
+          { name: "Costa Coffee", value: "costacoffee" },
+          { name: "Nando's", value: "nandos" },
+          { name: "Carl's Jr.", value: "carlsjr" },
+          { name: "Sagar Ratna", value: "sagarratna" },
+          { name: "Giani's Ice Cream", value: "gianis" },
+        ];
+
+        // Get 4 random restaurants
+        function getRandomRestaurants() {
+          // Create a copy of the array to avoid modifying the original
+          const shuffled = [...allRestaurants];
+          // Shuffle the array
+          for (let i = shuffled.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+          }
+          // Return first 4 elements
+          return shuffled.slice(0, 4);
+        }
+
+        // Populate dropdown with random restaurants
+        function populateDropdown() {
+          const dropdown = document.getElementById("restaurantDropdown");
+          // Clear existing options except the first one
+          dropdown.innerHTML = '<option value="">Select Restaurant</option>';
+
+          const selectedRestaurants = getRandomRestaurants();
+
+          selectedRestaurants.forEach((restaurant) => {
+            const option = document.createElement("option");
+            option.value = restaurant.value;
+            option.textContent = restaurant.name;
+            dropdown.appendChild(option);
+          });
+        }
+
+        // Initialize
+        populateDropdown();
+        restaurantDropdown.addEventListener("change", displayFoodItems);
+
+        // In your menu.html script section, replace the cart button click handler with:
+        document
+          .getElementById("cartButton")
+          .addEventListener("click", function () {
+            window.location.href = "cart.html";
+          });
+      });
+      // Helper function for :contains selector
+      document.querySelectorAll = function (selector) {
+        if (selector.includes(":contains(")) {
+          const [tag, text] = selector.split(":contains(");
+          const elements = document.querySelectorAll(tag);
+          return Array.from(elements).filter((el) =>
+            el.textContent.includes(text.replace(")", ""))
+          );
+        }
+        return document.querySelectorAll.apply(document, arguments);
+      };
+    </script>
+
+    <!-- Vendor JS Files -->
+    <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="assets/vendor/aos/aos.js"></script>
+    <script src="assets/vendor/glightbox/js/glightbox.min.js"></script>
+    <script src="assets/vendor/swiper/swiper-bundle.min.js"></script>
+
+    <!-- Main JS File -->
+    <script src="assets/js/main.js"></script>
+  </body>
+</html>

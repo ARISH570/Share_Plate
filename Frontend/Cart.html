@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cart</title>
+    <link href="./vendor/bootstrap/bootstrap.min.css" rel="stylesheet" />
+    <style>
+      body {
+        background: url("./assets/images/meetings-bg.jpg") no-repeat center
+          center fixed;
+        background-size: cover;
+        min-height: 100vh;
+      }
+      .container {
+        background-color: rgba(255, 255, 255, 0.9);
+        border-radius: 15px;
+        padding: 20px;
+        margin-top: 20px;
+        margin-bottom: 20px;
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+      }
+      .table img {
+        max-width: 80px;
+        height: auto;
+        border-radius: 5px;
+      }
+      .quantity-btn {
+        width: 30px;
+        height: 30px;
+        padding: 0;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container mt-4">
+      <h1 class="text-center mb-4">YOUR CART</h1>
+      <div class="table-responsive">
+        <table class="table table-bordered table-hover">
+          <thead class="table-dark">
+            <tr>
+              <th>Image</th>
+              <th>Name</th>
+              <th>Price</th>
+              <th>Quantity</th>
+              <th>Total</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="cartItems">
+            <!-- Cart Items will be added here dynamically -->
+          </tbody>
+          <tfoot>
+            <tr class="table-active">
+              <td colspan="4" class="text-end">
+                <strong>Grand Total:</strong>
+              </td>
+              <td id="grandTotal">₹0</td>
+              <td></td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+      <div class="d-flex justify-content-center gap-3 mt-4">
+        <button class="btn btn-danger px-4" onclick="clearCart()">
+          <i class="bi bi-trash"></i>
+          Clear Cart
+        </button>
+        <button class="btn btn-success px-4" onclick="placeOrder()">
+          <i class="bi bi-check-circle"></i>
+          Place Order
+        </button>
+      </div>
+    </div>
+
+    <script>
+      function loadCart() {
+        let cart = JSON.parse(localStorage.getItem("cart")) || [];
+        const cartTable = document.getElementById("cartItems");
+        cartTable.innerHTML = "";
+
+        let grandTotal = 0;
+        let totalItems = 0;
+
+        if (cart.length === 0) {
+          cartTable.innerHTML = `
+                    <tr>
+                        <td colspan="6" class="text-center py-4">
+                            <div class="alert alert-info">Your cart is empty!</div>
+                            <a href="menu.html" class="btn btn-primary">Back to Menu</a>
+                        </td>
+                    </tr>`;
+          document.getElementById("grandTotal").textContent = "₹0";
+          return;
+        }
+
+        cart.forEach((item, index) => {
+          const itemTotal = item.price * item.quantity;
+          grandTotal += itemTotal;
+          totalItems += item.quantity;
+
+          let row = `
+                <tr>
+                    <td><img src="${item.image}" class="img-thumbnail" alt="${
+            item.name
+          }"></td>
+                    <td class="align-middle">${item.name}</td>
+                    <td class="align-middle">₹${item.price.toFixed(2)}</td>
+                    <td class="align-middle">
+                        <div class="d-flex align-items-center justify-content-center gap-2">
+                            <button class="btn btn-sm btn-secondary quantity-btn" onclick="changeQuantity(${index}, -1)">-</button>
+                            <span>${item.quantity}</span>
+                            <button class="btn btn-sm btn-secondary quantity-btn" onclick="changeQuantity(${index}, 1)">+</button>
+                        </div>
+                    </td>
+                    <td class="align-middle">₹${itemTotal.toFixed(2)}</td>
+                    <td class="align-middle">
+                        <button class="btn btn-sm btn-danger" onclick="removeItem(${index})">
+                            Remove
+                        </button>
+                    </td>
+                </tr>`;
+          cartTable.innerHTML += row;
+        });
+
+        document.getElementById(
+          "grandTotal"
+        ).textContent = `₹${grandTotal.toFixed(2)}`;
+      }
+
+      async function placeOrder() {
+        let cart = JSON.parse(localStorage.getItem("cart")) || [];
+        let token = localStorage.getItem("token");
+
+        console.log("Token being sent:", token); // ✅ Debugging line
+
+        if (!token) {
+          alert("User not logged in! Please log in first.");
+          window.location.href = "http://localhost:5500/login.html";
+          return;
+        }
+
+        if (cart.length === 0) {
+          alert("Your cart is empty! Add some items before placing an order.");
+          return;
+        }
+
+        const orderData = {
+          items: cart,
+          totalAmount: cart.reduce(
+            (sum, item) => sum + item.price * item.quantity,
+            0
+          ),
+        };
+
+        console.log("Sending order data:", orderData); // ✅ Debugging line
+
+        try {
+          const response = await fetch(
+            "http://localhost:5500/api/orders/place",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`, // ✅ Sending token
+              },
+              body: JSON.stringify(orderData),
+            }
+          );
+
+          const data = await response.json();
+
+          if (response.ok) {
+            alert("Order placed successfully!");
+            localStorage.removeItem("cart");
+            loadCart();
+          } else {
+            console.error("Server response:", data);
+            alert(data.error || "Order failed! Please try again.");
+          }
+        } catch (error) {
+          console.error("Error placing order:", error);
+          alert("Something went wrong! Please try again.");
+        }
+      }
+
+      function removeItem(index) {
+        let cart = JSON.parse(localStorage.getItem("cart")) || [];
+        cart.splice(index, 1);
+        localStorage.setItem("cart", JSON.stringify(cart));
+        loadCart();
+      }
+
+      function clearCart() {
+        if (confirm("Are you sure you want to clear your cart?")) {
+          localStorage.removeItem("cart");
+          loadCart();
+        }
+      }
+
+      function changeQuantity(index, change) {
+        let cart = JSON.parse(localStorage.getItem("cart")) || [];
+        if (cart[index]) {
+          let newQuantity = cart[index].quantity + change;
+
+          // Check item's max limit
+          const maxLimit = cart[index].maxLimit || 5;
+
+          if (newQuantity > maxLimit) {
+            alert(`You can only add up to ${maxLimit} of this item.`);
+            return;
+          }
+
+          if (newQuantity <= 0) {
+            if (confirm("Remove this item from cart?")) {
+              cart.splice(index, 1);
+            } else {
+              return;
+            }
+          } else {
+            cart[index].quantity = newQuantity;
+          }
+
+          localStorage.setItem("cart", JSON.stringify(cart));
+          loadCart();
+        }
+      }
+
+      document.addEventListener("DOMContentLoaded", loadCart);
+    </script>
+  </body>
+</html>
