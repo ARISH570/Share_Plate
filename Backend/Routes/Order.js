@@ -54,7 +54,6 @@ router.post("/place", authenticateUser, async (req, res) => {
                 ${items.map(item => `<li>${item.name} (x${item.quantity}) - ₹${item.price * item.quantity}</li>`).join("")}
             </ul>
             <p><strong>Total Amount:</strong> ₹${totalAmount}</p>
-            <p>Your order will be delivered by <strong>${new Date(Date.now() + 3600000).toLocaleTimeString()}</strong>.</p>
             <p>Enjoy your meal!</p>
         `;
 

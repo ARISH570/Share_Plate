@@ -9,8 +9,8 @@ const rateLimit = require('express-rate-limit');
 const helmet = require('helmet');
 const mongoSanitize = require('express-mongo-sanitize');
 const User = require('./models/User');
-const path = require('path'); // Add this line at the top with other requires
-// Initialize Express app
+const path = require('path');
+
 const app = express();
 const frontendPath = path.join(__dirname, '../Frontend');
 app.use(express.static(frontendPath));
@@ -21,8 +21,10 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(mongoSanitize());
 app.use('/api/orders', require('./routes/Order'));
+const ContactRoutes = require('./Routes/ContactRoutes');
 
-const Order = require("./models/Order");  // Import the Order model
+const Order = require("./models/Order");  
+const Contact = require("./models/Contact"); // Import model
 
 
 // Rate limiting
@@ -47,7 +49,7 @@ mongoose.connect(MONGO_URI, {
   console.error("❌ MongoDB Connection Error:", err);
   process.exit(1);
 });
-
+app.use("/contact", ContactRoutes);
 // Email transporter
 const transporter = nodemailer.createTransport({
   service: 'gmail',
@@ -64,6 +66,28 @@ const transporter = nodemailer.createTransport({
 app.get('/test', (req, res) => {
   res.status(200).json({ message: 'Server is working!' });
 });
+
+app.post("/api/contact", async (req, res) => {
+  console.log("Received Data:", req.body); // Log the incoming request
+
+  try {
+      const { name, email, subject, message } = req.body;
+
+      // Check if subject is missing
+      if (!subject) {
+          return res.status(400).json({ error: "Subject is required!" });
+      }
+
+      const newContact = new Contact({ name, email, subject, message });
+      await newContact.save();
+
+      res.status(201).json({ message: "Contact saved successfully!" });
+  } catch (error) {
+      console.error("Error saving contact:", error);
+      res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
 // Place Order Route
 app.post("/place-order", async (req, res) => {
   try {
@@ -115,7 +139,7 @@ app.post('/register', async (req, res) => {
       await transporter.sendMail({
         from: process.env.EMAIL_USER,
         to: email,
-        subject: 'Welcome to Our Platform',
+        subject: 'Welcome to Share Plate',
         html: `<p>Hi ${name},</p>
                <p>Thank you for registering with us!</p>
                <p>Your account has been successfully created.</p>`

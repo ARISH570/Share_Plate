@@ -61,7 +61,7 @@
   <!-- ***** Main Banner Area Start ***** -->
 <section class="section main-banner" id="top" data-section="section1">
   <video autoplay muted loop id="bg-video">
-      <source src="./assets/images/video.mp4" type="video/mp4" />
+      <source src="./assets/images/7ee24b61747145f38e8731abdfeb2503.mp4" type="video/mp4" />
   </video>
 
   <div class="video-overlay header-text">
@@ -158,34 +158,41 @@
         <div class="col-lg-9 align-self-center">
           <div class="row">
             <div class="col-lg-12">
-              <form id="contact" action="" method="post">
+              <form id="contact-form" style="background: white; padding: 40px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.05);">
                 <div class="row">
                   <div class="col-lg-12">
-                    <h2>Let's get in touch</h2>
+                    <h1 style="font-size: 28px; font-weight: 700; color: #333; letter-spacing: 1px; margin-bottom: 30px;">LET'S GET IN TOUCH</h1>
                   </div>
                   <div class="col-lg-4">
                     <fieldset>
-                      <input name="name" type="text" id="name" placeholder="ENTER NAME..." required="">
+                      <input name="name" type="text" id="name" placeholder="ENTER NAME..." required="" 
+                        style="width: 100%; padding: 12px 15px; border: 1px solid #e0e0e0; border-radius: 4px; font-size: 14px; color: #555; margin-bottom: 15px;">
                     </fieldset>
                   </div>
                   <div class="col-lg-4">
                     <fieldset>
-                    <input name="email" type="text" id="email" pattern="[^ @]*@[^ @]*" placeholder="YOUR EMAIL..." required="">
-                  </fieldset>
+                      <input name="email" type="email" id="email" placeholder="YOUR EMAIL..." required="" 
+                        style="width: 100%; padding: 12px 15px; border: 1px solid #e0e0e0; border-radius: 4px; font-size: 14px; color: #555; margin-bottom: 15px;">
+                    </fieldset>
                   </div>
                   <div class="col-lg-4">
                     <fieldset>
-                      <input name="subject" type="text" id="subject" placeholder="SUBJECT..." required="">
+                      <input name="subject" type="text" id="subject" placeholder="SUBJECT..." required="" 
+                        style="width: 100%; padding: 12px 15px; border: 1px solid #e0e0e0; border-radius: 4px; font-size: 14px; color: #555; margin-bottom: 15px;">
                     </fieldset>
                   </div>
                   <div class="col-lg-12">
                     <fieldset>
-                      <textarea name="message" type="text" class="form-control" id="message" placeholder="YOUR MESSAGE..." required=""></textarea>
+                      <textarea name="message" class="form-control" id="message" placeholder="YOUR MESSAGE..." required="" 
+                        style="width: 100%; padding: 12px 15px; border: 1px solid #e0e0e0; border-radius: 4px; font-size: 14px; min-height: 120px; color: #555; margin-bottom: 20px;"></textarea>
                     </fieldset>
                   </div>
                   <div class="col-lg-12">
                     <fieldset>
-                      <button type="submit" id="form-submit" class="button">SEND MESSAGE NOW</button>
+                      <button type="submit" id="form-submit" class="button" 
+                        style="background-color: #a12c2f; color: white; border: none; padding: 14px 30px; border-radius: 4px; font-size: 16px; font-weight: 600; cursor: pointer; width: 100%; text-transform: uppercase; letter-spacing: 1px;">
+                        SEND MESSAGE NOW
+                      </button>
                     </fieldset>
                   </div>
                 </div>
@@ -198,13 +205,12 @@
             <ul>
               <li>
                 <h6>Phone Number</h6>
-                <span>91-0000000000</span>
+                <span>+918368197427</span>
               </li>
               <li>
                 <h6>Email Address</h6>
-                <span>info@gmail.com</span>
+                <span>shareplate@gmail.com</span>
               </li>
-             
               <li>
                 <h6>Website URL</h6>
                 <span>www.shareplate.com</span>
@@ -216,9 +222,8 @@
     </div>
     <div class="footer">
       <p>Copyright © Share Plate , All Rights Reserved. </p>
-          
     </div>
-  </section>
+</section>
 
   <!-- Scripts -->
   <!-- Bootstrap core JavaScript -->
@@ -277,6 +282,32 @@
         $(window).scroll(function () {
           checkSection();
         });
+        document.getElementById("contact-form").addEventListener("submit", async function (event) {
+    event.preventDefault(); // Prevent default form submission
+
+    const formData = {
+      name: document.getElementById("name").value,
+      email: document.getElementById("email").value,
+      subject: document.getElementById("subject").value,
+      message: document.getElementById("message").value,
+    };
+
+    try {
+      const response = await fetch("http://localhost:5500/api/contact", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const result = await response.json();
+      alert(result.message); // Show success message
+    } catch (error) {
+      alert("Error sending message.");
+      console.error(error);
+    }
+  });
     </script>
 </body>
 
