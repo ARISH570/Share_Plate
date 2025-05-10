@@ -139,7 +139,8 @@
 
         if (!token) {
           alert("User not logged in! Please log in first.");
-          window.location.href = "http://localhost:5500/login.html";
+          window.location.href =
+            "https://share-plate-j9m4.onrender.com/login.html";
           return;
         }
 
@@ -160,7 +161,7 @@
 
         try {
           const response = await fetch(
-            "http://localhost:5500/api/orders/place",
+            "https://share-plate-j9m4.onrender.com/api/orders/place",
             {
               method: "POST",
               headers: {
