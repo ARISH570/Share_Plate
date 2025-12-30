@@ -237,6 +237,8 @@
     <script src="assets/js/video.js"></script>
     <script src="assets/js/slick-slider.js"></script>
     <script src="assets/js/custom.js"></script>
+    <script src="assets/js/config.js"></script>
+
     <script>
         //according to loftblog tut
         $('.nav li:first').addClass('active');
@@ -293,7 +295,7 @@
     };
 
     try {
-      const response = await fetch("http://localhost:5500/api/contact", {
+      const response = await fetch(`${window.API_BASE_URL}/contact`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -309,7 +311,5 @@
     }
   });
     </script>
-</body>
-
 </body>
 </html>

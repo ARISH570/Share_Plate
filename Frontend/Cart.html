@@ -75,6 +75,7 @@
         </button>
       </div>
     </div>
+    <script src="assets/js/config.js"></script>
 
     <script>
       function loadCart() {
@@ -140,7 +141,7 @@
         if (!token) {
           alert("User not logged in! Please log in first.");
           window.location.href =
-            "https://share-plate-j9m4.onrender.com/login.html";
+            `${window.API_BASE_URL}/login.html`;
           return;
         }
 
@@ -161,7 +162,7 @@
 
         try {
           const response = await fetch(
-            "https://share-plate-j9m4.onrender.com/api/orders/place",
+            `${window.API_BASE_URL}/api/orders/place`,
             {
               method: "POST",
               headers: {
