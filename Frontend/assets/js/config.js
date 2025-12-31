@@ -13,7 +13,7 @@ if (isLocal) {
   API_BASE_URL = "https://share-plate-j9m4.onrender.com";
 } else {
   // AWS-hosted frontend
-  API_BASE_URL = "http://13.60.22.181:5500";
+  API_BASE_URL = "http://13.49.185.71:5500";
 }
 
 window.API_BASE_URL = API_BASE_URL;
