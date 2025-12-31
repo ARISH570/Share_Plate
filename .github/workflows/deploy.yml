@@ -12,18 +12,12 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Create SSH key file
-        run: |
-          mkdir -p /github/home/.ssh
-          echo "${{ secrets.EC2_SSH_KEY }}" > /github/home/.ssh/ec2_key
-          chmod 600 /github/home/.ssh/ec2_key
-
       - name: Deploy to EC2
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USER }}
-          key_path: /github/home/.ssh/ec2_key
+          key: ${{ secrets.EC2_SSH_KEY }}
           port: 22
           script: |
             cd ~/Share_Plate/Backend
