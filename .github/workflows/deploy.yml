@@ -20,7 +20,7 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           port: 22
           script: |
-            cd ~/Share_Plate/Backend
+            cd ~/Share_Plate
             git pull origin main
             npm install
             pm2 restart shareplate-backend || pm2 start server.js --name shareplate-backend
